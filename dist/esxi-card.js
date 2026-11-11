@@ -120,6 +120,9 @@ class EsxiHostCard extends i {
     static getStubConfig() {
         return { type: "custom:esxi-host-card", host_id: "esxi_host_name" };
     }
+    static getConfigElement() {
+        return document.createElement("esxi-host-card-editor");
+    }
     setConfig(config) {
         if (!config.host_id)
             throw new Error("host_id requis");
@@ -576,6 +579,9 @@ class EsxiVmCard extends i {
             vm_id: "vm_name",
             disk_capacity_gb: 650,
         };
+    }
+    static getConfigElement() {
+        return document.createElement("esxi-vm-card-editor");
     }
     setConfig(config) {
         if (!config.vm_id)
@@ -1078,6 +1084,105 @@ __decorate([
 ], EsxiVmCard.prototype, "_busy", void 0);
 if (typeof customElements !== "undefined") {
     customElements.define("esxi-vm-card", EsxiVmCard);
+}
+
+const SCHEMA$1 = [
+    { name: 'host_id', selector: { text: {} } },
+];
+const LABELS$1 = {
+    host_id: "Identifiant de l'hôte ESXi Stats",
+};
+const HELPERS$1 = {
+    host_id: "Hostname saisi lors de la config de l'intégration. Visible dans sensor.esxi_host_<host_id>_cpu_usage.",
+};
+class EsxiHostCardEditor extends i {
+    setConfig(config) {
+        this._config = config;
+    }
+    render() {
+        if (!this._config)
+            return A;
+        return b `
+      <ha-form
+        .hass=${this.hass}
+        .data=${this._config}
+        .schema=${SCHEMA$1}
+        .computeLabel=${(s) => LABELS$1[s.name] ?? s.name}
+        .computeHelper=${(s) => HELPERS$1[s.name] ?? ''}
+        @value-changed=${this._valueChanged}
+      ></ha-form>
+    `;
+    }
+    _valueChanged(ev) {
+        this.dispatchEvent(new CustomEvent('config-changed', {
+            detail: { config: ev.detail.value },
+            bubbles: true,
+            composed: true,
+        }));
+    }
+}
+__decorate([
+    n({ attribute: false })
+], EsxiHostCardEditor.prototype, "hass", void 0);
+__decorate([
+    r()
+], EsxiHostCardEditor.prototype, "_config", void 0);
+if (typeof customElements !== 'undefined') {
+    customElements.define('esxi-host-card-editor', EsxiHostCardEditor);
+}
+
+const SCHEMA = [
+    { name: 'vm_id', selector: { text: {} } },
+    {
+        name: 'disk_capacity_gb',
+        selector: { number: { min: 10, max: 102400, step: 1, mode: 'box', unit_of_measurement: 'Go' } },
+    },
+    { name: 'esxi_console_url', selector: { text: { type: 'url' } } },
+];
+const LABELS = {
+    vm_id: 'Identifiant de la VM ESXi Stats',
+    disk_capacity_gb: 'Capacité disque totale (Go)',
+    esxi_console_url: 'URL de la console web ESXi (optionnel)',
+};
+const HELPERS = {
+    vm_id: 'Visible dans sensor.vm_<vm_id>_cpu_usage. Correspond au nom de la VM (minuscules, underscores).',
+    disk_capacity_gb: 'Utilisé pour la jauge disque. Défaut : 650 Go.',
+    esxi_console_url: "Ex : https://192.168.1.10/ui — ouvre la console dans le détail de la carte.",
+};
+class EsxiVmCardEditor extends i {
+    setConfig(config) {
+        this._config = config;
+    }
+    render() {
+        if (!this._config)
+            return A;
+        return b `
+      <ha-form
+        .hass=${this.hass}
+        .data=${this._config}
+        .schema=${SCHEMA}
+        .computeLabel=${(s) => LABELS[s.name] ?? s.name}
+        .computeHelper=${(s) => HELPERS[s.name] ?? ''}
+        @value-changed=${this._valueChanged}
+      ></ha-form>
+    `;
+    }
+    _valueChanged(ev) {
+        this.dispatchEvent(new CustomEvent('config-changed', {
+            detail: { config: ev.detail.value },
+            bubbles: true,
+            composed: true,
+        }));
+    }
+}
+__decorate([
+    n({ attribute: false })
+], EsxiVmCardEditor.prototype, "hass", void 0);
+__decorate([
+    r()
+], EsxiVmCardEditor.prototype, "_config", void 0);
+if (typeof customElements !== 'undefined') {
+    customElements.define('esxi-vm-card-editor', EsxiVmCardEditor);
 }
 
 if (typeof window !== "undefined") {

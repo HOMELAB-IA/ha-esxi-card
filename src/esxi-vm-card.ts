@@ -39,6 +39,10 @@ export class EsxiVmCard extends LitElement {
     };
   }
 
+  static getConfigElement(): HTMLElement {
+    return document.createElement("esxi-vm-card-editor");
+  }
+
   setConfig(config: EsxiVmCardConfig): void {
     if (!config.vm_id) throw new Error("vm_id requis");
     this._config = config;

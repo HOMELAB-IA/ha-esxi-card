@@ -1,5 +1,7 @@
 import "./esxi-host-card.js";
 import "./esxi-vm-card.js";
+import "./esxi-host-card-editor.js";
+import "./esxi-vm-card-editor.js";
 
 if (typeof window !== "undefined") {
   const w = window as any;

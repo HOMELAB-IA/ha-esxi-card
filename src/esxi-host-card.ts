@@ -33,6 +33,10 @@ export class EsxiHostCard extends LitElement {
     return { type: "custom:esxi-host-card", host_id: "esxi_host_name" };
   }
 
+  static getConfigElement(): HTMLElement {
+    return document.createElement("esxi-host-card-editor");
+  }
+
   setConfig(config: EsxiHostCardConfig): void {
     if (!config.host_id) throw new Error("host_id requis");
     this._config = config;
