@@ -47,27 +47,31 @@ Ou manuellement :
 
 ```yaml
 type: custom:esxi-host-card
-host_id: esxi_dell   # nom de l'hôte tel que défini dans l'intégration ESXi Stats
+host_id: mon_hote   # nom de l'hôte tel que défini dans l'intégration ESXi Stats
 ```
+
+> **Trouver le `host_id`** : dans HA → Paramètres → Intégrations → ESXi Stats → entités. Les capteurs sont nommés `sensor.esxi_<host_id>_cpu_usage`, `sensor.esxi_<host_id>_memory_used`, etc.
 
 | Paramètre | Type | Requis | Description |
 |---|---|---|---|
-| `host_id` | `string` | ✅ | Identifiant de l'hôte dans ESXi Stats (ex. `esxi_dell`) |
+| `host_id` | `string` | ✅ | Identifiant de l'hôte dans ESXi Stats (correspond au `hostname` saisi lors de la configuration de l'intégration) |
 
 ### esxi-vm-card
 
 ```yaml
 type: custom:esxi-vm-card
-vm_id: nas_dc_2025            # identifiant de la VM dans ESXi Stats
+vm_id: ma_vm                  # identifiant de la VM dans ESXi Stats
 disk_capacity_gb: 650         # optionnel — capacité disque totale en Go (défaut : 650)
-esxi_console_url: https://esxi.homelab.local/ui   # optionnel — URL console ESXi
+esxi_console_url: https://ADRESSE_ESXI/ui   # optionnel — URL console ESXi
 ```
+
+> **Trouver le `vm_id`** : les capteurs VM sont nommés `sensor.vm_<vm_id>_cpu_usage`, `sensor.vm_<vm_id>_memory_used`, etc. Le `vm_id` correspond au nom de la VM tel qu'il apparaît dans vCenter/ESXi.
 
 | Paramètre | Type | Requis | Description |
 |---|---|---|---|
-| `vm_id` | `string` | ✅ | Identifiant de la VM dans ESXi Stats |
+| `vm_id` | `string` | ✅ | Identifiant de la VM dans ESXi Stats (nom de la VM dans vCenter, en minuscules et underscores) |
 | `disk_capacity_gb` | `number` | ❌ | Capacité disque totale en Go (défaut : 650) |
-| `esxi_console_url` | `string` | ❌ | URL de la console web ESXi (affiche un bouton dans la section actions) |
+| `esxi_console_url` | `string` | ❌ | URL de la console web ESXi — ex. `https://192.168.1.10/ui` ou `https://esxi.domaine.local/ui` |
 
 ## Dépendances
 
